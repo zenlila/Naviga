@@ -666,7 +666,7 @@ body {
   const colors = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
 
-  const baseColor = new THREE.Color(0x3d9089);
+  const baseColor = new THREE.Color(0x2d7a73);
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const idx = r * cols + c;
@@ -692,8 +692,8 @@ body {
   const dotMat = new THREE.ShaderMaterial({
     transparent: true,
     uniforms: {
-      uBaseSize: { value: 0.045 },
-      uOpacity: { value: 0.85 },
+      uBaseSize: { value: 0.05 },
+      uOpacity: { value: 0.95 },
       uPixelRatio: { value: renderer.getPixelRatio() },
     },
     vertexShader: [
