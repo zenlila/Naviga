@@ -503,6 +503,18 @@
 5. **Header background** — `background: #fff` on mobile (was `transparent`), giving the text area a white zone before the golden cards.
 6. **X close button** — Changed from 36×36px circle at `top: 14px; right: 14px` to bare 20×20px icon at `top: 50px; right: 40px` matching Figma Union icon placement. No background, no border-radius.
 
+### 2026-03-27 — Session 7g: Mobile Padding Pixel-Exact Pass
+
+**Figma reference:** `Homepage - Mobile - Main` (78:292, 440×956)
+
+All changes in `@media (max-width: 600px)` only — desktop/tablet unaffected.
+
+1. **Logo** — `top: 12px; left: 11px` → `top: 20px; left: 20px` (Figma node 78:1049)
+2. **Frosted header** — `padding: 48px 11px 0` → `56px 11px 0` (accommodates logo shift: 20px top + 30px height + 6px gap)
+3. **Main card padding-top** — `184px` → `192px` (matches new header height)
+4. **Yacht name area** — `padding: 16px 40px 0` → `20px 40px 0` (Figma: ~20px below image)
+5. **Dashboard** — `padding: 0 35px 10px` → `0 40px 10px` (Figma: specs start ~40px from edge)
+
 ---
 
 ## Reference Files
