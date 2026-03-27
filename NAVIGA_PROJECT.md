@@ -348,6 +348,50 @@
 4. **Zone C border-radius** — Changed from `border-radius: 20px` (all corners) to `20px 20px 0 0` (top corners only) since it sits flush at viewport bottom.
 5. **Figma-exact paddings** — Zone A: `padding: 48px 11px 0` (room for logo). Zone B image: `margin: -8px 20px 0`. Dashboard: `padding: 0 35px 10px`. CTA: `padding: 24px 20px 20px`.
 
+### 2026-03-27 — Session 6: Logo Aspect-Ratio Fix + Z-Index + Mobile Logo
+
+**Logo SVG fix:**
+1. **SVG intrinsic dimensions** — `logo.svg` had `preserveAspectRatio="none"` and `width="100%" height="100%"`, causing the logo to stretch/squash to fill its container at non-1920px widths. Fixed: `preserveAspectRatio="xMidYMid meet"`, `width="184" height="71"` (matching viewBox).
+2. **CSS height: auto** — Both `.logo` and `.logo img` changed from fixed/percentage `height` to `height: auto`, so the SVG's natural 184:71 ratio is always preserved across all breakpoints.
+
+**Logo z-index — pushed to background:**
+3. **Desktop z-index** — `.logo` changed from `z-index: 20` to `z-index: 1`. Logo now renders behind the card, carousel, and all interactive UI.
+4. **Tablet z-index** — Same `z-index: 1` in the ≤1024px breakpoint.
+
+**Mobile logo — visible per Figma:**
+5. **Logo restored on mobile** — Changed from `display: none` to `display: block; position: fixed; top: 12px; left: 11px; width: 77px; z-index: 30`. Matches Figma "Homepage - Mobile - Main" (78:292) where logo sits top-left at 77×30px.
+6. **Header padding** — Frosted header `padding-top` kept at `48px` to accommodate logo above country tabs.
+
+**Month picker edge-to-edge fix:**
+7. **Picker width on mobile** — Changed from `width: 100%; margin: 0` to `width: calc(100% + 22px); margin: 0 -11px` so the month picker extends to screen edges past the frosted header's `11px` padding.
+
+### 2026-03-27 — Session 6b: Mobile Yacht Image Crossfade Layout Fix
+
+**Problem:** On mobile, yacht images would sometimes stretch to full width and sometimes not when switching yachts. Root cause: the two crossfade image layers (A/B) used CSS `:nth-of-type(2)` to make only the second image `position: absolute`. When crossfade swapped the active layer, both images could momentarily be `position: relative` flex participants, causing the row to expand unpredictably.
+
+**Fix — `.yacht-img-wrap` container:**
+1. **New wrapper div** — Added `.yacht-img-wrap` around `imgA` + `imgB`. On desktop: `display: contents` (invisible, no layout impact). On mobile: `display: block; position: relative; flex: 1 1 auto; overflow: hidden; border-radius: 20px`.
+2. **Both images always absolute** — Removed `:nth-of-type(2)` and `[data-current]` layout-switching approach. Both `.yacht-visual-img` elements are now always `position: absolute; inset: 0` inside the wrapper on mobile. The wrapper is the single stable flex participant between the peek images.
+3. **Stable layout** — The wrapper maintains a fixed flex slot between the two 40px carousel peeks. Crossfade only toggles `opacity` and `z-index` on the images — no position/flex changes, so no layout shift.
+
+### 2026-03-27 — Session 6c: Mobile Yacht Image Spacing + Corners
+
+**Figma reference:** Image at `top: 190px`, `400×230px` centered in 440px frame, `border-radius: 20px` all corners. No frosted overlay — gradient background sits above, image starts cleanly below.
+
+**Fixes:**
+1. **Removed image overlap** — `margin-top: -8px` → `margin-top: 0` on `.yacht-image-row`. Image no longer tucks under the header gradient.
+2. **Header spacing** — `.main-card` `padding-top: 160px` → `190px` to match the Figma gradient area height (190px). Image starts right where the gradient ends.
+3. **Image horizontal margins** — Added `padding: 0 20px` on `.yacht-image-row` so the image is 20px inset from screen edges, matching Figma's 400px image in 440px frame.
+4. **All-corner radius** — `.yacht-img-wrap` already has `border-radius: 20px; overflow: hidden`, giving all four corners the 20px radius per Figma.
+
+### 2026-03-27 — Session 7: Dashboard Figma Audit (Desktop + Mobile)
+
+**Figma MCP verification** — Pulled design context for both `Homepage - Main` (35:252) and `Homepage - Mobile - Main` (78:292). Compared "Selected Yacht: Dashboard" node parameters against current implementation.
+
+**Fixes:**
+1. **Mobile stat-number font-size** — At `≤600px`, the tablet media query (`max-width: 1024px`) also applies and had reduced `.stat-number` to `40px`. Mobile section now explicitly resets `.stat-number { font-size: 48px }` to match Figma mobile frame.
+2. **Mobile dashboard row distribution** — Dashboard had `flex: 0 0 auto; align-content: flex-start`, packing both rows (stats, specs/amenities) to the top. Changed to `flex: 1 1 0; align-content: space-evenly` so the two wrapped rows distribute vertically within the available space between yacht name and CTA footer, respecting padding rules.
+
 ---
 
 ## Reference Files

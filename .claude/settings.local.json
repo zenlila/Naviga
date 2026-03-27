@@ -10,7 +10,13 @@
       "Read(//Users/cagataytok/.claude/skills/**)",
       "mcp__puppeteer__puppeteer_navigate",
       "mcp__puppeteer__puppeteer_screenshot",
-      "mcp__puppeteer__puppeteer_evaluate"
+      "mcp__puppeteer__puppeteer_evaluate",
+      "Bash(mcp-server-puppeteer --version)",
+      "Bash(/opt/homebrew/bin/mcp-server-puppeteer --version)",
+      "Bash(npm list:*)",
+      "Bash(find /opt/homebrew/lib/node_modules/@hisma/server-puppeteer -name *.ts)",
+      "Bash(node:*)",
+      "mcp__plugin_figma_figma__get_screenshot"
     ]
   }
 }
