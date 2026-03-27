@@ -290,14 +290,70 @@
 8. **Tab gap** — `.country-tabs` gap changed from `10px` to `20px` (Figma: 20px between 200px-wide tabs).
 9. **Tabs→picker gap** — `.frosted-header` gap changed from `18px` to `22px` (Figma: 22px between bottom of tabs and top of month picker).
 
+### 2026-03-27 — Session 5: Adaptive Design (Desktop → Tablet → Mobile)
+
+**Figma frames used:**
+- `Homepage - Main` (35:252, 1920×1080) — desktop reference
+- `Homepage - Mobile - Main` (78:292, 440×956) — mobile reference
+
+**Breakpoints:** Desktop (>1024px) · Tablet (601–1024px) · Mobile (≤600px)
+
+#### Structural — Mobile adaptive layout
+1. **Card shell removed on mobile** — `.main-card` loses background, shadow, border-radius. Content flows on white page. `display: contents` on `.yacht-visual` explodes the image container so frosted-header, image, name, dashboard, and CTA become direct flex children.
+2. **Sticky header** — Logo + country tabs + month picker stick to top via `position: sticky; top: 0` on `.frosted-header` inside the scrollable `.main-card`. Logo positioned absolutely over the gradient header area.
+3. **Sticky CTA footer** — CTA area uses `position: sticky; bottom: 0; margin-top: auto` to always pin at the bottom of the viewport.
+4. **Scrollable middle** — `.main-card` becomes `overflow-y: auto; flex: 1` so the yacht image, name, and dashboard scroll between the sticky header and footer.
+5. **Mobile gradient header** — Gradient background (`113.36deg, #d1fefb → #f7fffe`) applied directly to `.frosted-header` instead of a separate fixed div.
+
+#### Components — Mobile style changes
+6. **Country tabs** — Inverted: black borders, black text, 100px pills, no flag icons. Active = black fill + white text. Gap: 6px, left-aligned at `padding-left: 11px`.
+7. **Month slider** — Black text on light background. Selected item gets `box-shadow: 0px 10px 30px rgba(0,0,0,0.3)`. Selected card overlaps yacht image by 8px (`margin-top: -8px` on image) matching Figma positioning.
+8. **Yacht image** — 230px tall, `border-radius: 20px`, 20px horizontal margin. Dark gradient overlay removed. Cross-dissolve uses `data-current` attribute to show active layer only.
+9. **Nav arrows** — 36×36px, always visible, positioned at `left: 15px / right: 15px`. JS `alignMobileNavArrows()` calculates vertical center relative to active image. MutationObserver re-positions on yacht change.
+10. **Yacht name** — New mobile-only element (`#yachtNameMobile`) below image. Black text, 32px EB Garamond SemiBold, 60px decorative lines. JS syncs both desktop and mobile name elements.
+11. **Dashboard** — Two-row layout: stats (3× 120px blocks, gap: 10px) on top row, specs (170px) + vertical divider + amenities (170px) side-by-side below. Gap: 30px total between specs/amenities.
+12. **CTA** — Two-row: "Video Call Now" centered on top, horizontal divider, "Watch Video" | vertical divider | "Call Me" below. Golden gradient (`#ffb366 → #ffdc8c`), `border-radius: 20px`.
+
+#### Tablet (601–1024px)
+13. **Card fluid** — `width: 100%; max-width: 920px`. Carousel and watermark hidden. Nav arrows always visible.
+14. **Frosted header** — `overflow: hidden` clips month picker within card bounds. Tighter padding and 160px tabs.
+15. **Dashboard** — Horizontal layout preserved with tighter gaps (30px), smaller stat numbers (40px), narrower specs (150px).
+
+#### Cross-cutting fixes
+16. **Image crossfade fix** — `currentImg.removeAttribute('data-current')` after swapping layers. Prevents both images showing simultaneously on mobile where CSS `!important` overrides inline opacity.
+17. **Month picker resize fix** — `wrapperCenter` was calculated once at init, causing misaligned items when resizing between breakpoints. Now recalculates via `resize` event listener and re-snaps track position.
+18. **CTA button text** — "Schedule" renamed to "Call Me" matching updated Figma design.
+
+### 2026-03-27 — Session 5b: Mobile Layout Zones + Pixel-Perfect Pass
+
+**Zone architecture defined:**
+```
+┌─────────────────────────────────┐
+│  ZONE A — STICKY HEADER         │ ← sticky top, gradient bg
+│  Logo + Tabs + Month Picker     │
+├─────────────────────────────────┤
+│  ZONE B — SCROLLABLE CONTENT    │ ← flex:1, overflow-y:auto
+│  Image (fixed 230px) + Name     │
+│  Stats + Specs (stretches)      │
+├─────────────────────────────────┤
+│  ZONE C — STICKY FOOTER         │ ← sticky bottom, gold gradient
+│  Video Call Now / Watch / Call   │
+└─────────────────────────────────┘
+```
+
+**Changes:**
+1. **Three.js bg kept on mobile** — removed separate `mobile-gradient-header` div. Desktop's Three.js canvas + gradient stays visible through mobile layout. Zone A header has its own gradient overlay.
+2. **Yacht image fixed ratio** — `height: 230px !important; flex: 0 0 230px` prevents image from stretching. `aspect-ratio` approach failed due to flex container interference.
+3. **Dashboard stretches** — `flex: 1 0 auto` on `.dashboard` makes the Name + Stats + Specs zone fill remaining vertical space between image and CTA.
+4. **Zone C border-radius** — Changed from `border-radius: 20px` (all corners) to `20px 20px 0 0` (top corners only) since it sits flush at viewport bottom.
+5. **Figma-exact paddings** — Zone A: `padding: 48px 11px 0` (room for logo). Zone B image: `margin: -8px 20px 0`. Dashboard: `padding: 0 35px 10px`. CTA: `padding: 24px 20px 20px`.
+
 ---
 
 ## Reference Files
 
 | File | Purpose |
 |------|---------|
-| `SpecialProjects/NavigaYachting/index.html` | **Main deliverable** (single HTML file, local assets) |
-| `SpecialProjects/NavigaYachting/assets/` | Local images: yachts, flags, logo |
-| `ios-horizontal-picker-demo.html` | Source: month slider component (JS logic) |
-| `naviga-yacht-selector.html` | Original prototype (remote URLs, stale) |
+| `index.html` | **Main deliverable** (single HTML file, inline CSS + JS, local assets) |
+| `assets/` | Local images: `yachts/`, `flags/`, `logo.svg` |
 | This document | Project tracker |

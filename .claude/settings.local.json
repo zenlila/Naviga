@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_figma_figma__whoami",
+      "mcp__plugin_figma_figma__get_metadata",
+      "Bash(npx skills:*)",
+      "mcp__plugin_figma_figma__get_design_context",
+      "Bash(npx:*)",
+      "Read(//Users/cagataytok/.claude/**)",
+      "Read(//Users/cagataytok/.claude/skills/**)",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "mcp__puppeteer__puppeteer_evaluate"
+    ]
+  }
+}

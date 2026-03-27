@@ -460,6 +460,9 @@ body {
   padding: 28px 40px 24px;
   gap: 60px;
 }
+.dashboard-divider-mobile {
+  display: none;
+}
 
 /* Left: Specs */
 .specs-left {
@@ -588,35 +591,498 @@ body {
 }
 
 /* ══════════════════════════════════════
-   RESPONSIVE — basic mobile awareness
+   YACHT IMAGE ROW + CAROUSEL PEEK IMAGES
    ══════════════════════════════════════ */
-@media (max-width: 1500px) {
-  /* yacht-picker items sized by JS */
+/* Desktop: wrapper is transparent, peeks hidden */
+.yacht-image-row {
+  display: contents; /* no effect on desktop layout */
 }
-@media (max-width: 1100px) {
+.carousel-peek {
+  display: none; /* hidden on desktop */
+}
+
+/* ══════════════════════════════════════
+   MOBILE GRADIENT HEADER (replaces Three.js bg)
+   ══════════════════════════════════════ */
+.mobile-gradient-header {
+  display: none;
+}
+
+/* ══════════════════════════════════════
+   YACHT NAME — mobile: below image
+   ══════════════════════════════════════ */
+.yacht-name-area-mobile {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 20px 0;
+}
+.yacht-name-row-mobile {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  justify-content: center;
+  gap: 16px;
+}
+.yacht-name-line-mobile {
+  width: 60px;
+  flex-shrink: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.25);
+  position: relative;
+  top: -4px;
+}
+.yacht-name-text-mobile {
+  font-family: 'EB Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #000;
+  letter-spacing: 0.64px;
+  text-align: center;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════
+   CTA — mobile two-row layout
+   ══════════════════════════════════════ */
+.cta-bar-mobile {
+  display: none;
+}
+
+/* ══════════════════════════════════════
+   ADAPTIVE — TABLET (1024px — 601px)
+   ══════════════════════════════════════ */
+@media (max-width: 1500px) and (min-width: 1025px) {
+  /* Logo: not enough side space, hide it (picker cards dominate the left) */
+  .logo { display: none; }
+}
+
+@media (max-width: 1024px) {
+  /* Logo: centered above card when picker is hidden */
+  .logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: clamp(77px, 10vw + 20px, 160px);
+    height: auto;
+    margin: clamp(12px, 2vw, 24px) auto clamp(8px, 1.5vw, 16px);
+    z-index: 20;
+  }
+}
+
+@media (max-width: 1024px) {
+  /* Hide carousel + watermark */
   .yacht-picker-wrapper { display: none; }
   .country-watermark { display: none; }
-  .logo { position: relative; left: auto; margin: 0 auto 16px; }
-  .page { padding: 20px 12px; }
+
+  /* Page layout */
+  .page { padding: 20px 16px; }
   .page-inner { flex-direction: column; }
-}
-@media (max-width: 960px) {
-  .main-card { width: 100%; border-radius: 28px 28px 16px 16px; }
-  .frosted-header { height: auto; padding: 16px 12px; border-radius: 28px 28px 0 0; }
-  .country-tabs { flex-wrap: wrap; justify-content: center; gap: 6px; }
-  .country-tab { width: auto; min-width: 80px; padding: 0 16px; font-size: 14px; }
-  .yacht-visual { height: 480px; }
-  .yacht-name-text { font-size: 38px; }
+
+  /* Card: fluid width */
+  .main-card {
+    width: 100%;
+    max-width: 920px;
+    border-radius: 32px 32px 18px 18px;
+  }
+
+  /* Yacht image: shorter */
+  .yacht-visual {
+    height: 500px;
+    border-radius: 32px 32px 0 0;
+  }
+  .yacht-visual-img { border-radius: 32px 32px 0 0; }
+
+  /* Frosted header: adapt */
+  .frosted-header {
+    border-radius: 32px 32px 0 0;
+    padding: 24px 20px 0;
+    gap: 18px;
+    overflow: hidden;
+  }
+
+  /* Tabs: slightly smaller */
+  .country-tabs { gap: 12px; }
+  .country-tab { width: 160px; }
+
+  /* Picker: constrain within frosted header */
+  .picker-wrapper {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  /* Yacht name: slightly smaller */
+  .yacht-name-text { font-size: 46px; }
+  .yacht-name-line { width: 120px; }
+
+  /* Dashboard: keep horizontal but tighter */
   .dashboard {
+    gap: 30px;
+    padding: 24px 24px 20px;
+  }
+  .specs-left, .specs-right { width: 150px; }
+  .stat-block { width: 100px; }
+  .stat-number { font-size: 40px; }
+
+  /* CTA: slightly shorter */
+  .cta-bar { height: 80px; }
+
+  /* Nav arrows: always visible on tablet (no hover) */
+  .yacht-nav { opacity: 1; }
+}
+
+/* ══════════════════════════════════════
+   ADAPTIVE — MOBILE (600px and below)
+   ══════════════════════════════════════ */
+@media (max-width: 600px) {
+
+  /* ── Hide desktop-only elements ── */
+  #bgCanvas { display: none; }
+  .yacht-picker-wrapper { display: none; }
+  .country-watermark { display: none; }
+  .mobile-gradient-header { display: none; }
+
+  /* ══════════════════════════════════════
+     PAGE SHELL — full viewport, 3 zones
+     ══════════════════════════════════════ */
+  body { background: #ffffff; }
+
+  .page {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding: 20px 24px;
+    justify-content: flex-start;
+    padding: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
   }
-  .specs-center { flex: none; }
-  .cta-bar { height: 70px; }
-  .cta-section { font-size: 16px; }
-  .cta-divider { height: 36px; }
+  .page-inner {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    /* no max-width — Zone A and C go full width */
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+  }
+
+  /* ══════════════════════════════════════
+     ZONE A — STICKY HEADER (full width)
+     Logo + Tabs + Month Picker
+     ══════════════════════════════════════ */
+
+  /* Logo — hidden on mobile (tabs + picker are the header) */
+  .logo {
+    display: none;
+  }
+
+  /* Frosted header = ZONE A — fixed at top, NOT inside scroll */
+  .frosted-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    flex-shrink: 0;
+    height: auto;
+    background: linear-gradient(113.36deg, #d1fefb 0%, #f7fffe 100%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    padding: 8px 11px 0;
+    gap: 6px;
+    z-index: 20;
+    order: 1;
+    width: 100%;
+    /* Allow selected month card to overflow below the header */
+    overflow: visible;
+  }
+
+  /* Country Tabs (Figma: 100×36px, gap:6px, centered) */
+  .country-tabs {
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+  }
+  .country-tab {
+    width: 100px;
+    height: 36px;
+    border: 1px solid #000;
+    border-radius: 20px;
+    color: #000;
+    background: transparent;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .country-tab:hover { background: rgba(0,0,0,0.05); }
+  .country-tab.active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    font-weight: 500;
+  }
+  .country-tab .flag-icon { display: none; }
+
+  /* Month Picker (Figma: 80px selected, shadow, items 60px) */
+  .picker-wrapper {
+    width: 100%;
+    margin: 0;
+    height: 80px;
+  }
+  .month-name { color: #000; }
+  .occ-pct { color: #000; }
+  .center-overlay {
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+  }
+
+  /* ══════════════════════════════════════
+     ZONE B — SCROLLABLE CONTENT
+     Yacht Image (fixed ratio) + Name + Stats + Specs
+     ══════════════════════════════════════ */
+
+  /* Main card = ZONE B scroll container */
+  .main-card {
+    width: 100%;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    /* Space for fixed Zone A header and Zone C footer */
+    padding-top: 160px;
+    padding-bottom: 150px;
+  }
+
+  /* Yacht visual explodes so children flow in scroll */
+  .yacht-visual {
+    display: contents;
+  }
+
+  /* ── Yacht Image Row — horizontal flex: peek | image | peek ── */
+  .yacht-image-row {
+    display: flex !important;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+    height: 230px;
+    flex: 0 0 230px;
+    order: 2;
+    margin-top: -8px;     /* overlap picker selected card by 8px */
+    position: relative;
+    overflow: visible;
+  }
+
+  /* ── Main Yacht Image ── */
+  .yacht-visual-img {
+    position: relative !important;
+    width: 0;
+    flex: 1 1 auto;      /* takes remaining space between peeks */
+    height: 230px !important;
+    min-height: 230px;
+    max-height: 230px;
+    border-radius: 20px;
+    margin: 0;
+    object-fit: cover;
+    z-index: 2;           /* on top of peek images */
+  }
+  /* Both layers stacked — JS controls opacity for crossfade transitions */
+  .yacht-visual-img {
+    transition: opacity 0.5s ease;
+  }
+  .yacht-visual-img:nth-of-type(2) {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    flex: none !important;
+  }
+  #transitionCanvas { border-radius: 20px !important; }
+  .yacht-visual::after { display: none; }
+
+  /* ── Carousel Peek Images — negative margin, tucked behind main image ── */
+  .carousel-peek {
+    display: block;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 230px;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    opacity: 0.7;
+  }
+  .carousel-peek-left {
+    margin-right: -16px;  /* tuck behind left edge of main image */
+    border-radius: 0;
+  }
+  .carousel-peek-right {
+    margin-left: -16px;   /* tuck behind right edge of main image */
+    border-radius: 0;
+  }
+
+  /* ── Nav Arrows (Figma: 36×36, vertically centered on image) ── */
+  /* These are inside .yacht-visual (display:contents) so they become children of .main-card.
+     We position them via JS relative to .yacht-image-row. */
+  .yacht-nav {
+    display: flex;
+    width: 36px;
+    height: 36px;
+    opacity: 1;
+    background: rgba(0,0,0,0.25);
+    z-index: 10;
+    position: absolute;
+  }
+  .yacht-nav svg { width: 18px; height: 18px; }
+  .yacht-nav-left { left: 15px; }
+  .yacht-nav-right { right: 15px; }
+
+  /* ── Yacht Name (Figma: 32px, center, lines 60px, padded 40px from edges) ── */
+  .yacht-name-area { display: none; }
+  .yacht-name-area-mobile {
+    display: flex;
+    order: 3;
+    padding: 16px 40px 0;
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .yacht-name-text-mobile { font-size: 32px; }
+  .yacht-name-line-mobile { width: 60px; }
+
+  /* ── Dashboard + CTA ordering ── */
+  .dashboard { order: 4; }
+  .cta-area { order: 5; }
+
+  /* ── Dashboard — STRETCHABLE zone with white bg ── */
+  /* This fills remaining space between image and CTA */
+  .dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 0;
+    padding: 0 35px 10px;
+    flex: 0 0 auto;
+    background: #fff;
+  }
+
+  /* Stats row (Figma: 3× 120px, gap:10px, centered, 120px tall area) */
+  .specs-center {
+    order: -1;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    flex-basis: 100%;
+    padding: 10px 0 12px;
+  }
+  .stat-block { width: 120px; }
+
+  /* Specs + amenities row (Figma: 170px + divider + 170px, gap:8px rows) */
+  .specs-left {
+    order: 1;
+    gap: 8px;
+    width: 170px;
+    flex-shrink: 0;
+  }
+  .dashboard-divider-mobile {
+    display: block;
+    order: 2;
+    width: 1px;
+    align-self: stretch;
+    background: rgba(0,0,0,0.15);
+    margin: 0 14.5px;
+    flex-shrink: 0;
+  }
+  .specs-right {
+    order: 3;
+    gap: 8px;
+    width: 170px;
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════
+     ZONE C — STICKY FOOTER (full width)
+     Video Call Now / Watch Video / Call Me
+     Figma: 440×190, rounded 20px top
+     ══════════════════════════════════════ */
+  .cta-area {
+    padding: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    width: 100%;
+  }
+  .cta-bar { display: none; }
+  .cta-bar-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background: linear-gradient(to top, #ffb366, #ffdc8c);
+    border-radius: 20px 20px 0 0;
+    /* Figma: "Video Call Now" at y=806.5, CTA top at y=766 → 40.5px padding top
+       "Watch/Call" at y=886.5, CTA bottom at y=956 → ~70px from bottom → padding bottom ~24px */
+    padding: 24px 20px 20px;
+    gap: 0;
+  }
+  .cta-mobile-primary {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+    letter-spacing: 0.4px;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+  /* Figma: horizontal divider at y=844.5, width 400px, left:20 */
+  .cta-mobile-divider {
+    width: calc(100% - 0px); /* full width inside padding */
+    height: 1px;
+    background: rgba(0,0,0,0.12);
+    margin: 6px 0;
+  }
+  .cta-mobile-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .cta-mobile-secondary {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+    letter-spacing: 0.4px;
+    text-align: center;
+    padding: 10px 0;
+    cursor: pointer;
+    border: none;
+    background: none;
+    flex: 1;
+  }
+  /* Figma: vertical divider 1×40px at left:220, top:866 */
+  .cta-mobile-vertical-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(0,0,0,0.12);
+    flex-shrink: 0;
+  }
 }
 </style>
 </head>
@@ -962,6 +1428,9 @@ body {
 })();
 </script>
 
+<!-- Mobile gradient header (hidden on desktop) -->
+<div class="mobile-gradient-header"></div>
+
 <div class="page">
 <div class="page-inner">
 
@@ -983,8 +1452,13 @@ body {
 
     <!-- Yacht Image Area -->
     <div class="yacht-visual" id="yachtVisual">
-      <img class="yacht-visual-img" id="yachtImgA" src="" alt="">
-      <img class="yacht-visual-img" id="yachtImgB" src="" alt="" style="opacity:0">
+      <!-- Mobile: image row with carousel peeks. Desktop: only imgs visible -->
+      <div class="yacht-image-row">
+        <div class="carousel-peek carousel-peek-left" id="peekLeft"></div>
+        <img class="yacht-visual-img" id="yachtImgA" src="" alt="">
+        <img class="yacht-visual-img" id="yachtImgB" src="" alt="" style="opacity:0">
+        <div class="carousel-peek carousel-peek-right" id="peekRight"></div>
+      </div>
       <canvas id="transitionCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:0;border-radius:40px 40px 0 0;"></canvas>
 
       <!-- Frosted Header: Tabs + Picker (180px) -->
@@ -1033,21 +1507,41 @@ body {
       </button>
     </div>
 
+    <!-- Yacht Name — mobile (below image, black text) -->
+    <div class="yacht-name-area-mobile">
+      <div class="yacht-name-row-mobile">
+        <div class="yacht-name-line-mobile"></div>
+        <div class="yacht-name-text-mobile" id="yachtNameMobile">Dea Del Mare</div>
+        <div class="yacht-name-line-mobile"></div>
+      </div>
+    </div>
+
     <!-- Dashboard -->
     <div class="dashboard">
       <div class="specs-left" id="specsLeft"></div>
       <div class="specs-center" id="specsCenter"></div>
+      <div class="dashboard-divider-mobile"></div>
       <div class="specs-right" id="specsRight"></div>
     </div>
 
-    <!-- CTA -->
+    <!-- CTA — Desktop -->
     <div class="cta-area">
       <div class="cta-bar">
         <button class="cta-section">Watch Video</button>
         <div class="cta-divider"></div>
         <button class="cta-section cta-primary">Video Call Now</button>
         <div class="cta-divider"></div>
-        <button class="cta-section">Schedule</button>
+        <button class="cta-section">Call Me</button>
+      </div>
+      <!-- CTA — Mobile -->
+      <div class="cta-bar-mobile">
+        <button class="cta-mobile-primary">Video Call Now</button>
+        <div class="cta-mobile-divider"></div>
+        <div class="cta-mobile-row">
+          <button class="cta-mobile-secondary">Watch Video</button>
+          <div class="cta-mobile-vertical-divider"></div>
+          <button class="cta-mobile-secondary">Call Me</button>
+        </div>
       </div>
     </div>
 
@@ -1154,7 +1648,7 @@ function createMonthPicker(wrapperId, data_, defaultIndex, onChange) {
   const track = wrapper.querySelector('.picker-track');
   const smallWidth = 80;
   const bigWidth = 120;
-  const wrapperCenter = wrapper.offsetWidth / 2;
+  let wrapperCenter = wrapper.offsetWidth / 2;
   const N = data.length;
   const copies = 5;
   const totalItems = N * copies;
@@ -1167,6 +1661,19 @@ function createMonthPicker(wrapperId, data_, defaultIndex, onChange) {
   const allItems = track.querySelectorAll('.picker-item');
   let virtualIndex = centerCopyStart + defaultIndex;
   let startX = 0, startTranslate = 0, isDragging = false, hasMoved = false;
+
+  // Recalculate center on resize so items stay aligned at all viewport widths
+  function refreshCenter() {
+    wrapperCenter = wrapper.offsetWidth / 2;
+  }
+  window.addEventListener('resize', function() {
+    refreshCenter();
+    // Re-snap to current position with updated center
+    track.classList.add('no-transition');
+    track.style.transform = 'translateX(' + getTranslate(virtualIndex) + 'px)';
+    track.offsetHeight;
+    track.classList.remove('no-transition');
+  });
 
   function getTranslate(vi) {
     return wrapperCenter - (vi * smallWidth + bigWidth / 2);
@@ -1543,7 +2050,9 @@ function updateYachtDetail(yacht) {
 
   if (currentImg.src && !currentImg.src.endsWith('/') && currentImg.getAttribute('data-current') !== yacht.img) {
     const fromSrc = currentImg.src;
-    const fxActive = typeof triggerTransition === 'function' && fromSrc
+    const isMobile = window.innerWidth <= 600;
+    const fxActive = !isMobile
+                   && typeof triggerTransition === 'function' && fromSrc
                    && document.getElementById('fxSelect')
                    && document.getElementById('fxSelect').value !== 'none';
 
@@ -1552,6 +2061,7 @@ function updateYachtDetail(yacht) {
       triggerTransition(fromSrc, yacht.img, function onCanvasReady() {
         nextImg.src = yacht.img;
         nextImg.setAttribute('data-current', yacht.img);
+        currentImg.removeAttribute('data-current');
         nextImg.style.transition = 'none';
         nextImg.style.zIndex = '2';
         currentImg.style.zIndex = '1';
@@ -1565,6 +2075,7 @@ function updateYachtDetail(yacht) {
       // CSS cross-dissolve (no canvas effect)
       nextImg.src = yacht.img;
       nextImg.setAttribute('data-current', yacht.img);
+      currentImg.removeAttribute('data-current');
       nextImg.style.zIndex = '2';
       currentImg.style.zIndex = '1';
       nextImg.style.opacity = '1';
@@ -1578,8 +2089,9 @@ function updateYachtDetail(yacht) {
     currentImg.style.opacity = '1';
   }
 
-  // Update name (title case per v4 design)
+  // Update name (both desktop + mobile elements)
   document.getElementById('yachtName').textContent = yacht.name;
+  document.getElementById('yachtNameMobile').textContent = yacht.name;
 
   // Specs left
   document.getElementById('specsLeft').innerHTML =
@@ -1603,6 +2115,18 @@ function updateYachtDetail(yacht) {
   document.getElementById('specsRight').innerHTML = html;
 
   // Country watermark managed by setBgCountry()
+
+  // Update mobile carousel peek images (prev/next yacht slivers)
+  if (currentYachts.length > 1) {
+    var currentIdx = currentYachts.indexOf(yacht);
+    if (currentIdx < 0) currentIdx = 0;
+    var prevIdx = (currentIdx - 1 + currentYachts.length) % currentYachts.length;
+    var nextIdx = (currentIdx + 1) % currentYachts.length;
+    var peekL = document.getElementById('peekLeft');
+    var peekR = document.getElementById('peekRight');
+    if (peekL) peekL.style.backgroundImage = 'url(' + currentYachts[prevIdx].img + ')';
+    if (peekR) peekR.style.backgroundImage = 'url(' + currentYachts[nextIdx].img + ')';
+  }
 }
 
 function refreshYachts() {
@@ -1684,7 +2208,18 @@ document.querySelectorAll('#countryTabs .country-tab').forEach(tab => {
 refreshYachts();
 
 // Align picker vertically with exposed yacht image center (below frosted header)
+/* ── Layout mode detection ── */
+const mobileQuery = window.matchMedia('(max-width: 600px)');
+const tabletQuery = window.matchMedia('(max-width: 1024px)');
+
+function isMobile() { return mobileQuery.matches; }
+function isTablet() { return tabletQuery.matches && !mobileQuery.matches; }
+
 function alignPicker() {
+  const wrapper = document.getElementById('yachtPickerWrapper');
+  if (!wrapper) return;
+  // Hide picker on tablet/mobile via CSS, but also skip JS positioning
+  if (tabletQuery.matches) return;
   const visual = document.getElementById('yachtVisual');
   const header = document.querySelector('.frosted-header');
   if (!visual) return;
@@ -1692,12 +2227,38 @@ function alignPicker() {
   const headerH = header ? header.offsetHeight : 0;
   // Exposed image runs from (visual.top + headerH) to visual.bottom
   const exposedCenter = vRect.top + headerH + (vRect.height - headerH) / 2;
-  const wrapper = document.getElementById('yachtPickerWrapper');
   wrapper.style.top = exposedCenter + 'px';
   wrapper.style.transform = 'translateY(-50%)';
 }
 alignPicker();
-window.addEventListener('resize', alignPicker);
+
+// Position mobile nav arrows at vertical center of yacht image
+function alignMobileNavArrows() {
+  if (!isMobile()) {
+    // Reset to CSS-controlled positioning on desktop
+    document.getElementById('yachtNavLeft').style.top = '';
+    document.getElementById('yachtNavRight').style.top = '';
+    return;
+  }
+  // Find the active image element
+  var activeImg = document.querySelector('.yacht-visual-img[data-current]');
+  if (!activeImg) return;
+  var card = document.querySelector('.main-card');
+  if (!card) return;
+  var imgRect = activeImg.getBoundingClientRect();
+  var cardRect = card.getBoundingClientRect();
+  // Arrow center = image vertical center relative to card
+  var arrowTop = (imgRect.top - cardRect.top) + (imgRect.height / 2) - 18; // 18 = half of 36px
+  document.getElementById('yachtNavLeft').style.top = arrowTop + 'px';
+  document.getElementById('yachtNavRight').style.top = arrowTop + 'px';
+}
+alignMobileNavArrows();
+window.addEventListener('resize', function() { alignPicker(); alignMobileNavArrows(); });
+
+// Re-align arrows after yacht image loads
+var observer = new MutationObserver(function() { if (isMobile()) alignMobileNavArrows(); });
+observer.observe(document.getElementById('yachtImgA'), { attributes: true, attributeFilter: ['data-current'] });
+observer.observe(document.getElementById('yachtImgB'), { attributes: true, attributeFilter: ['data-current'] });
 
 /* ══════════════════════════════════════
    IMAGE TRANSITION ENGINE + DEBUG PANEL
@@ -1709,8 +2270,12 @@ window.addEventListener('resize', alignPicker);
   const ctx = canvas.getContext('2d');
 
   function resize() {
-    canvas.width = visual.offsetWidth;
-    canvas.height = visual.offsetHeight;
+    // On mobile, .yacht-visual is display:contents so use .yacht-image-row instead
+    var ref = visual.offsetWidth > 0 ? visual : document.querySelector('.yacht-image-row');
+    if (ref) {
+      canvas.width = ref.offsetWidth;
+      canvas.height = ref.offsetHeight;
+    }
   }
   resize();
   window.addEventListener('resize', resize);
