@@ -1419,8 +1419,8 @@ body {
     inset: 0;
     z-index: 25;
     border-radius: 0;
-    /* White bg for header zone, golden gradient starts at cards via .contact-options bg */
-    background: #fff;
+    /* Golden gradient covers full panel; image + header get white bg to create the white zone */
+    background: linear-gradient(to top, #ffb76d, #ffe09b 79.6%);
   }
   .contact-yacht-image {
     height: 170px;
@@ -1473,10 +1473,8 @@ body {
     grid-template-columns: 1fr;
     gap: 10px;
     padding: 0 10px;
-    background: linear-gradient(to top, #ffb76d, #ffe09b 79.6%);
+    background: none;
     flex: 0 0 auto;
-    padding-top: 0;
-    padding-bottom: 0;
   }
   .contact-card {
     height: 90px;
@@ -1490,7 +1488,8 @@ body {
   .contact-card-subtitle { font-size: 13px; }
   .contact-bottom {
     padding: 10px 10px 16px;
-    background: #ffb76d;
+    background: none;
+    margin-top: auto;
   }
   .contact-go-back { display: none; }
   .contact-live-bar {
