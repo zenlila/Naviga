@@ -515,6 +515,13 @@ All changes in `@media (max-width: 600px)` only — desktop/tablet unaffected.
 4. **Yacht name area** — `padding: 16px 40px 0` → `20px 40px 0` (Figma: ~20px below image)
 5. **Dashboard** — `padding: 0 35px 10px` → `0 40px 10px` (Figma: specs start ~40px from edge)
 
+### 2026-03-27 — Session 7h: Contact Panel Visual Polish
+
+1. **Mobile golden gradient fix** — Gradient was lost when `.contact-options` changed to `flex: 0 0 auto`. Moved gradient back to `.contact-panel` as full-height background. White zone created by `.contact-header { background: #fff }` and `.contact-yacht-image` covering the top portion.
+2. **Mobile card overlap** — Header `padding-bottom: 40px` for breathing room. `.contact-options` `margin-top: -16px` pulls WhatsApp card into the white zone, matching Figma's overlap effect.
+3. **Glass effects** — Removed all faked glass (borders, box-shadows, inset highlights). Replaced with Figma-exact `rgba` fills + `backdrop-filter: blur(20px)` on cards, live bar, and Go to Back button. Clean frosted look against the golden gradient.
+4. **Desktop card gap** — `.contact-options` gap reduced from `20px` to `10px`. Fixed `flex: 1 0 auto` → `flex: 0 0 auto` which was stretching the grid to fill viewport height, distributing extra space between rows regardless of gap value.
+
 ---
 
 ## Reference Files
