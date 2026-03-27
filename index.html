@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NAVIGA — Yacht Selector</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════
    RESET & BASE
@@ -591,6 +591,320 @@ body {
 }
 
 /* ══════════════════════════════════════
+   CONTACT PANEL — "Button Clicked" overlay
+   ══════════════════════════════════════ */
+.contact-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: linear-gradient(to top, #ffb76d, #ffe09b 79.6%);
+  border-radius: 40px 40px 20px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.3s ease;
+  will-change: transform;
+}
+.contact-panel.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.contact-panel::-webkit-scrollbar { display: none; }
+
+/* Compressed yacht image */
+.contact-yacht-image {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 40px 40px 0 0;
+  flex-shrink: 0;
+}
+.contact-yacht-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.contact-yacht-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 130px;
+  background: linear-gradient(to top, rgba(47,47,47,0.6), transparent);
+  pointer-events: none;
+}
+.contact-yacht-name {
+  position: absolute;
+  bottom: 20px;
+  left: 40px;
+  font-family: 'EB Garamond', serif;
+  font-size: 56px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1.12px;
+  line-height: 1;
+  z-index: 1;
+}
+.contact-yacht-line {
+  position: absolute;
+  bottom: 28px;
+  right: 40px;
+  width: 480px;
+  height: 2px;
+  background: rgba(255,255,255,0.5);
+  z-index: 1;
+}
+/* Desktop: X close on image is HIDDEN (use header close instead) */
+@media (min-width: 601px) {
+  .contact-close-mobile { display: none; }
+}
+.contact-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.2s;
+}
+.contact-close-btn:hover { background: rgba(0,0,0,0.5); }
+
+/* White content header — Figma: 187px white rectangle */
+.contact-header {
+  background: #fff;
+  min-height: 187px;
+  padding: 28px 40px 20px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contact-title-line1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+}
+.contact-title-line2 {
+  font-family: 'EB Garamond', serif;
+  font-size: 54px;
+  font-weight: 600;
+  font-style: italic;
+  color: #000;
+  line-height: 1.1;
+}
+.contact-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000;
+  margin-top: 8px;
+}
+.contact-header-close {
+  position: absolute;
+  top: 24px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  opacity: 0.3;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+.contact-header-close:hover { opacity: 0.6; }
+
+/* Contact option cards — 2-col grid */
+.contact-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 10px 40px 20px;
+  flex: 1 0 auto;
+}
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 110px;
+  padding: 0 20px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+.contact-card:hover {
+  background: rgba(255,255,255,0.35);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.contact-card-full { grid-column: 1 / -1; }
+.contact-card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.6);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contact-card-icon img, .contact-card-icon svg {
+  width: 38px;
+  height: 38px;
+}
+.contact-card-text { flex: 1; min-width: 0; }
+.contact-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+}
+.contact-card-subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(0,0,0,0.4);
+  margin-top: 2px;
+}
+.contact-card-chevron {
+  flex-shrink: 0;
+  width: 8px;
+  height: 16px;
+  opacity: 0.5;
+}
+
+/* Bottom bar */
+.contact-bottom {
+  padding: 16px 40px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.contact-go-back {
+  width: 190px;
+  height: 73px;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+  border-radius: 0 20px 20px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.8);
+  cursor: pointer;
+  flex-shrink: 0;
+  letter-spacing: 0.4px;
+  transition: background 0.2s;
+}
+.contact-go-back:hover { background: rgba(255,255,255,0.6); }
+.contact-live-bar {
+  flex: 1;
+  height: 50px;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+.contact-live-bar strong { font-weight: 700; }
+.contact-live-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ── Offline state ── */
+.contact-panel.offline .contact-card[data-action="whatsapp"],
+.contact-panel.offline .contact-card[data-action="facetime"],
+.contact-panel.offline .contact-card[data-action="googlemeet"],
+.contact-panel.offline .contact-card[data-action="phone"] {
+  background: rgba(210,163,104,0.2);
+  border-color: rgba(210,163,104,0.15);
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+}
+.contact-panel.offline .contact-card[data-action="whatsapp"] .contact-card-icon,
+.contact-panel.offline .contact-card[data-action="facetime"] .contact-card-icon,
+.contact-panel.offline .contact-card[data-action="googlemeet"] .contact-card-icon,
+.contact-panel.offline .contact-card[data-action="phone"] .contact-card-icon {
+  background: rgba(255,255,255,0.1);
+}
+.contact-panel.offline .contact-card[data-action="whatsapp"] .contact-card-title,
+.contact-panel.offline .contact-card[data-action="facetime"] .contact-card-title,
+.contact-panel.offline .contact-card[data-action="googlemeet"] .contact-card-title,
+.contact-panel.offline .contact-card[data-action="phone"] .contact-card-title {
+  opacity: 0.4;
+}
+.contact-panel.offline .contact-card[data-action="whatsapp"] .contact-card-subtitle,
+.contact-panel.offline .contact-card[data-action="facetime"] .contact-card-subtitle,
+.contact-panel.offline .contact-card[data-action="googlemeet"] .contact-card-subtitle,
+.contact-panel.offline .contact-card[data-action="phone"] .contact-card-subtitle {
+  opacity: 0.1;
+}
+.contact-panel.offline .contact-card[data-action="whatsapp"] .contact-card-chevron,
+.contact-panel.offline .contact-card[data-action="facetime"] .contact-card-chevron,
+.contact-panel.offline .contact-card[data-action="googlemeet"] .contact-card-chevron,
+.contact-panel.offline .contact-card[data-action="phone"] .contact-card-chevron {
+  display: none;
+}
+.contact-panel.offline .contact-card[data-action="phone"] .contact-card-icon img {
+  opacity: 0.2;
+}
+
+/* ── Static side images for contact panel state ── */
+/* Figma "Button Clicked": 2 images flanking the card at top:242px (198px from card top),
+   327-328px × 421px, centered at ±316px from card center, border-radius: 20px */
+.panel-side-img {
+  display: block;
+  position: absolute;
+  width: 328px;
+  height: 421px;
+  border-radius: 20px;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.panel-side-img.visible {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════
    YACHT IMAGE ROW + CAROUSEL PEEK IMAGES
    ══════════════════════════════════════ */
 /* Desktop: wrapper is transparent, peeks hidden */
@@ -735,6 +1049,11 @@ body {
 
   /* Nav arrows: always visible on tablet (no hover) */
   .yacht-nav { opacity: 1; }
+
+  /* Contact panel: tighter on tablet */
+  .contact-options { padding: 10px 24px 0; }
+  .contact-header { padding: 24px 24px 16px; }
+  .contact-bottom { padding: 12px 24px 16px; }
 }
 
 /* ══════════════════════════════════════
@@ -1092,6 +1411,96 @@ body {
     height: 40px;
     background: rgba(0,0,0,0.12);
     flex-shrink: 0;
+  }
+
+  /* ── Contact Panel — Mobile overrides ── */
+  .contact-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    border-radius: 0;
+    /* White bg for header zone, golden gradient starts at cards via .contact-options bg */
+    background: #fff;
+  }
+  .contact-yacht-image {
+    height: 170px;
+    border-radius: 0;
+  }
+  .contact-yacht-name {
+    font-size: 36px;
+    letter-spacing: 0.72px;
+    bottom: 16px;
+    left: 20px;
+  }
+  .contact-yacht-line {
+    width: 160px;
+    bottom: 22px;
+    left: auto;
+    right: 20px;
+    transform: none;
+  }
+  /* Mobile: show X on image (bare icon, no circle bg), hide header X */
+  .contact-close-mobile {
+    display: flex;
+    position: absolute;
+    top: 50px;
+    right: 40px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+  }
+  .contact-close-mobile img {
+    width: 20px;
+    height: 20px;
+  }
+  .contact-header-close { display: none; }
+  .contact-header {
+    background: #fff;
+    min-height: auto;
+    padding: 36px 20px 14px;
+  }
+  .contact-title-line1 { font-size: 20px; }
+  .contact-title-line2 { font-size: 42px; }
+  .contact-description {
+    font-size: 16px;
+    max-width: 400px;
+  }
+  .contact-options {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 0 10px;
+    background: linear-gradient(to top, #ffb76d, #ffe09b 79.6%);
+    flex: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .contact-card {
+    height: 90px;
+    padding: 0 15px;
+  }
+  .contact-card-full {
+    grid-column: auto;
+    height: 110px;
+  }
+  .contact-card-title { font-size: 18px; }
+  .contact-card-subtitle { font-size: 13px; }
+  .contact-bottom {
+    padding: 10px 10px 16px;
+    background: #ffb76d;
+  }
+  .contact-go-back { display: none; }
+  .contact-live-bar {
+    width: 100%;
+    font-size: 13px;
+  }
+  .contact-live-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
   }
 }
 </style>
@@ -1454,6 +1863,10 @@ body {
     <div class="yacht-picker-track" id="yachtPickerTrack"></div>
   </div>
 
+  <!-- PANEL SIDE IMAGES — static prev/next yachts shown during contact panel (desktop only) -->
+  <img class="panel-side-img panel-side-left" id="panelSideLeft" src="" alt="">
+  <img class="panel-side-img panel-side-right" id="panelSideRight" src="" alt="">
+
   <!-- COUNTRY WATERMARK -->
   <div class="country-watermark" id="countryWatermark"></div>
 
@@ -1539,20 +1952,114 @@ body {
     <!-- CTA — Desktop -->
     <div class="cta-area">
       <div class="cta-bar">
-        <button class="cta-section">Watch Video</button>
+        <button class="cta-section" data-cta="watch">Watch Video</button>
         <div class="cta-divider"></div>
-        <button class="cta-section cta-primary">Video Call Now</button>
+        <button class="cta-section cta-primary" data-cta="videocall">Video Call Now</button>
         <div class="cta-divider"></div>
-        <button class="cta-section">Call Me</button>
+        <button class="cta-section" data-cta="callme">Call Me</button>
       </div>
       <!-- CTA — Mobile -->
       <div class="cta-bar-mobile">
-        <button class="cta-mobile-primary">Video Call Now</button>
+        <button class="cta-mobile-primary" data-cta="videocall">Video Call Now</button>
         <div class="cta-mobile-divider"></div>
         <div class="cta-mobile-row">
-          <button class="cta-mobile-secondary">Watch Video</button>
+          <button class="cta-mobile-secondary" data-cta="watch">Watch Video</button>
           <div class="cta-mobile-vertical-divider"></div>
-          <button class="cta-mobile-secondary">Call Me</button>
+          <button class="cta-mobile-secondary" data-cta="callme">Call Me</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         CONTACT PANEL — "Button Clicked" overlay
+         ══════════════════════════════════════ -->
+    <div class="contact-panel" id="contactPanel">
+      <!-- Compressed yacht image -->
+      <div class="contact-yacht-image">
+        <img class="contact-yacht-img" id="contactYachtImg" src="" alt="">
+        <div class="contact-yacht-overlay"></div>
+        <div class="contact-yacht-name" id="contactYachtName"></div>
+        <div class="contact-yacht-line"></div>
+        <!-- X close on image — mobile only (hidden on desktop via CSS) -->
+        <button class="contact-close-btn contact-close-mobile" id="contactCloseBtn" aria-label="Close">
+          <img src="assets/icons/close.svg" alt="" width="20" height="20">
+        </button>
+      </div>
+
+      <!-- Content header with X close — desktop only -->
+      <div class="contact-header">
+        <div class="contact-title-line1">Connect with</div>
+        <div class="contact-title-line2">the crew</div>
+        <div class="contact-description" id="contactDescription">See the yacht live - choose how you'd like to connect. The crew is currently on board.</div>
+        <button class="contact-header-close" id="contactHeaderClose" aria-label="Close">
+          <img src="assets/icons/close.svg" alt="" width="20" height="20">
+        </button>
+      </div>
+
+      <!-- Contact option cards -->
+      <div class="contact-options">
+        <button class="contact-card" data-action="whatsapp">
+          <div class="contact-card-icon">
+            <img src="assets/icons/whatsapp.svg" alt="WhatsApp" width="48" height="48">
+          </div>
+          <div class="contact-card-text">
+            <div class="contact-card-title">WhatsApp</div>
+            <div class="contact-card-subtitle">Video &amp; Audio call</div>
+          </div>
+          <img class="contact-card-chevron" src="assets/icons/chevron.svg" alt="" width="8" height="16">
+        </button>
+
+        <button class="contact-card" data-action="facetime">
+          <div class="contact-card-icon">
+            <img src="assets/icons/facetime.svg" alt="FaceTime" width="48" height="48">
+          </div>
+          <div class="contact-card-text">
+            <div class="contact-card-title">FaceTime</div>
+            <div class="contact-card-subtitle">Apple devices only</div>
+          </div>
+          <img class="contact-card-chevron" src="assets/icons/chevron.svg" alt="" width="8" height="16">
+        </button>
+
+        <button class="contact-card" data-action="googlemeet">
+          <div class="contact-card-icon">
+            <img src="assets/icons/googlemeet.svg" alt="Google Meet" width="48" height="48">
+          </div>
+          <div class="contact-card-text">
+            <div class="contact-card-title">Google Meet</div>
+            <div class="contact-card-subtitle">Android &amp; Apple devices</div>
+          </div>
+          <img class="contact-card-chevron" src="assets/icons/chevron.svg" alt="" width="8" height="16">
+        </button>
+
+        <button class="contact-card" data-action="phone">
+          <div class="contact-card-icon">
+            <img src="assets/icons/phone.png" alt="Phone" width="40" height="40">
+          </div>
+          <div class="contact-card-text">
+            <div class="contact-card-title">Phone Call</div>
+            <div class="contact-card-subtitle">Audio only</div>
+          </div>
+          <img class="contact-card-chevron" src="assets/icons/chevron.svg" alt="" width="8" height="16">
+        </button>
+
+        <button class="contact-card contact-card-full" data-action="schedule">
+          <div class="contact-card-icon">
+            <img src="assets/icons/calendar.png" alt="Schedule" width="38" height="38">
+          </div>
+          <div class="contact-card-text">
+            <div class="contact-card-title" id="scheduleTitle">Schedule a Call</div>
+            <div class="contact-card-subtitle">Send a message via WhatsApp - crew will confirm a time</div>
+          </div>
+          <img class="contact-card-chevron" src="assets/icons/chevron.svg" alt="" width="8" height="16">
+        </button>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="contact-bottom">
+        <button class="contact-go-back" id="contactGoBack">Go to Back</button>
+        <div class="contact-live-bar" id="contactLiveBar">
+          <img class="contact-live-icon" id="contactLiveIcon" src="assets/icons/live.png" alt="Live" width="50" height="50">
+          <span id="contactLiveText"><span id="contactLiveDetail"><strong id="contactLiveBold">Currently on board:</strong> Captain Ahmet - <span id="contactLiveYacht">Dea Del Mare</span>.</span><span id="contactOfflineMsg" style="display:none">Leave a message and they'll get back to you <strong>as soon as possible.</strong></span></span>
         </div>
       </div>
     </div>
@@ -2584,6 +3091,192 @@ observer.observe(document.getElementById('yachtImgB'), { attributes: true, attri
       panel.style.display = panelVisible ? 'block' : 'none';
     }
   });
+})();
+
+/* ══════════════════════════════════════
+   CONTACT PANEL — "Button Clicked" STATE
+   Supports Live and Offline modes
+   ══════════════════════════════════════ */
+(function() {
+  var contactPanel = document.getElementById('contactPanel');
+  var contactYachtImg = document.getElementById('contactYachtImg');
+  var contactYachtName = document.getElementById('contactYachtName');
+  var contactDescription = document.getElementById('contactDescription');
+  var contactLiveIcon = document.getElementById('contactLiveIcon');
+  var contactLiveBold = document.getElementById('contactLiveBold');
+  var contactLiveDetail = document.getElementById('contactLiveDetail');
+  var contactLiveYacht = document.getElementById('contactLiveYacht');
+  var scheduleTitle = document.getElementById('scheduleTitle');
+  var contactPanelOpen = false;
+  var savedScrollTop = 0;
+
+  // Toggle this to switch between Live/Offline states
+  // In production, this would be driven by real-time crew status
+  var crewIsLive = true;
+
+  var contactOfflineMsg = document.getElementById('contactOfflineMsg');
+
+  function applyCrewState() {
+    var yachtName = contactYachtName.textContent || '';
+    if (crewIsLive) {
+      contactPanel.classList.remove('offline');
+      contactDescription.textContent = 'See the yacht live - choose how you\'d like to connect. The crew is currently on board.';
+      contactLiveIcon.style.display = '';
+      contactLiveDetail.style.display = '';
+      contactLiveYacht.textContent = yachtName;
+      contactOfflineMsg.style.display = 'none';
+      scheduleTitle.textContent = 'Schedule a Call';
+    } else {
+      contactPanel.classList.add('offline');
+      contactDescription.textContent = 'The crew is currently off board. Schedule a call - they\'ll reach out to confirm a time.';
+      contactLiveIcon.style.display = 'none';
+      contactLiveDetail.style.display = 'none';
+      contactOfflineMsg.style.display = '';
+      scheduleTitle.textContent = 'Schedule a Call / Call me later';
+    }
+  }
+
+  // ── Static side images for panel state (desktop) ──
+  var panelSideLeft = document.getElementById('panelSideLeft');
+  var panelSideRight = document.getElementById('panelSideRight');
+  var pickerWrapper = document.getElementById('yachtPickerWrapper');
+
+  function showPanelSideImages() {
+    // Get prev/next yacht images from current filtered list
+    if (typeof currentYachts === 'undefined' || currentYachts.length < 2) return;
+    var idx = typeof activeYacht !== 'undefined' ? activeYacht : 0;
+    var prevIdx = (idx - 1 + currentYachts.length) % currentYachts.length;
+    var nextIdx = (idx + 1) % currentYachts.length;
+    panelSideLeft.src = currentYachts[prevIdx].img;
+    panelSideRight.src = currentYachts[nextIdx].img;
+
+    // Position relative to the card
+    var card = document.querySelector('.main-card');
+    if (!card) return;
+    var cardRect = card.getBoundingClientRect();
+    var pageInner = document.querySelector('.page-inner');
+    var innerRect = pageInner.getBoundingClientRect();
+
+    // Figma: side images at 198px from card top
+    var imgTop = (cardRect.top - innerRect.top) + 198;
+    panelSideLeft.style.top = imgTop + 'px';
+    panelSideRight.style.top = imgTop + 'px';
+
+    // Figma: centered at ±316px from card center
+    var cardCenterX = (cardRect.left - innerRect.left) + cardRect.width / 2;
+    panelSideLeft.style.left = (cardCenterX - 316 - 328 / 2) + 'px';
+    panelSideRight.style.left = (cardCenterX + 316 - 328 / 2) + 'px';
+
+    // Hide the scrolling carousel, show static images
+    if (pickerWrapper) pickerWrapper.style.display = 'none';
+    panelSideLeft.classList.add('visible');
+    panelSideRight.classList.add('visible');
+  }
+
+  function hidePanelSideImages() {
+    panelSideLeft.classList.remove('visible');
+    panelSideRight.classList.remove('visible');
+    // Restore the scrolling carousel after fade-out transition completes
+    setTimeout(function() {
+      if (pickerWrapper) {
+        pickerWrapper.style.display = '';
+        if (window.innerWidth > 1024 && typeof alignPicker === 'function') {
+          alignPicker();
+        }
+      }
+    }, 500);
+  }
+
+  function openContactPanel() {
+    if (contactPanelOpen) return;
+    contactPanelOpen = true;
+
+    // Copy current yacht image and name
+    var currentImg = document.querySelector('.yacht-visual-img[data-current]');
+    if (currentImg) contactYachtImg.src = currentImg.src;
+    var nameEl = document.getElementById('yachtName');
+    var nameMobile = document.getElementById('yachtNameMobile');
+    var yachtName = (nameEl && nameEl.textContent) || (nameMobile && nameMobile.textContent) || '';
+    contactYachtName.textContent = yachtName;
+
+    // Apply live/offline state
+    applyCrewState();
+
+    // Stagger child elements for reveal
+    var children = contactPanel.querySelectorAll('.contact-yacht-image, .contact-header, .contact-card, .contact-bottom');
+    for (var i = 0; i < children.length; i++) {
+      children[i].style.opacity = '0';
+      children[i].style.transform = 'translateY(20px)';
+      children[i].style.transition = 'none';
+    }
+
+    // Show static side images for panel state (desktop only)
+    if (window.innerWidth > 1024) {
+      showPanelSideImages();
+    }
+
+    // Activate panel
+    contactPanel.classList.add('active');
+
+    // Stagger reveal after a frame
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        for (var i = 0; i < children.length; i++) {
+          children[i].style.transition = 'opacity 0.4s ease ' + (i * 0.06) + 's, transform 0.4s ease ' + (i * 0.06) + 's';
+          children[i].style.opacity = '1';
+          children[i].style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    // Lock scroll on mobile
+    if (window.innerWidth <= 600) {
+      var mainCard = document.querySelector('.main-card');
+      if (mainCard) savedScrollTop = mainCard.scrollTop;
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeContactPanel() {
+    if (!contactPanelOpen) return;
+    contactPanelOpen = false;
+
+    contactPanel.classList.remove('active');
+
+    // Hide static side images, restore carousel (desktop)
+    hidePanelSideImages();
+
+    // Restore scroll on mobile
+    document.body.style.overflow = '';
+    if (window.innerWidth <= 600) {
+      var mainCard = document.querySelector('.main-card');
+      if (mainCard) mainCard.scrollTop = savedScrollTop;
+    }
+  }
+
+  // CTA buttons — match by data-cta attribute (robust, no text matching)
+  document.querySelectorAll('[data-cta="videocall"], [data-cta="callme"]').forEach(function(btn) {
+    btn.addEventListener('click', openContactPanel);
+  });
+
+  // Close handlers — both mobile (image X) and desktop (header X) + Go Back
+  document.getElementById('contactCloseBtn').addEventListener('click', closeContactPanel);
+  document.getElementById('contactGoBack').addEventListener('click', closeContactPanel);
+  document.getElementById('contactHeaderClose').addEventListener('click', closeContactPanel);
+
+  // Escape key closes panel
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && contactPanelOpen) {
+      closeContactPanel();
+    }
+  });
+
+  // Block yacht navigation while panel is open
+  document.addEventListener('keydown', function(e) {
+    if (contactPanelOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+      e.stopImmediatePropagation();
+    }
+  }, true);
 })();
 </script>
 </body>

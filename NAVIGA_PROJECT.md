@@ -392,6 +392,117 @@
 1. **Mobile stat-number font-size** — At `≤600px`, the tablet media query (`max-width: 1024px`) also applies and had reduced `.stat-number` to `40px`. Mobile section now explicitly resets `.stat-number { font-size: 48px }` to match Figma mobile frame.
 2. **Mobile dashboard row distribution** — Dashboard had `flex: 0 0 auto; align-content: flex-start`, packing both rows (stats, specs/amenities) to the top. Changed to `flex: 1 1 0; align-content: space-evenly` so the two wrapped rows distribute vertically within the available space between yacht name and CTA footer, respecting padding rules.
 
+### 2026-03-27 — Session 7b: Contact Panel ("Button Clicked - Live")
+
+**Figma frames used:**
+- `Homepage - Button Clicked - Live` (62:2, 1920×1080) — desktop reference
+- `Homepage - Mobile - Button Clicked - Live` (78:815, 440×956) — mobile reference
+
+**Feature:** Clicking "Video Call Now" or "Call Me" opens a golden contact panel overlay inside the main card.
+
+#### Architecture
+- **Overlay approach** — New `div.contact-panel` positioned absolutely inside `.main-card` (desktop) or `position: fixed` (mobile). Normal card state preserved underneath for instant restoration.
+- **Animation** — `translateY(100%)` → `translateY(0)` with `cubic-bezier(0.23, 1, 0.32, 1)` over 500ms. Golden gradient matches CTA bar for visual continuity ("CTA expands upward"). Children stagger in with 60ms delays.
+- **Close** — X button on image (both), "Go to Back" button (desktop only), Escape key. Yacht arrow navigation disabled while panel is open.
+
+#### Desktop layout
+1. **Yacht image** — Compressed to 200px height (from 637px), gradient overlay + yacht name preserved.
+2. **White header** — "Connect with" (Inter Bold 24px) + "*the crew*" (EB Garamond SemiBold Italic 54px) + description. X close button at top-right.
+3. **Contact cards** — 2-column grid + 1 full-width: WhatsApp, FaceTime, Google Meet, Phone Call, Schedule a Call. Each 110px tall, `bg-rgba(255,255,255,0.2)`, `rounded-20px`, 60px icon circle, chevron arrow.
+4. **Bottom bar** — "Go to Back" button (190×73px, white/40%) + live status bar with indicator icon.
+
+#### Mobile layout
+5. **Yacht image** — 170px height, full-width, no border-radius.
+6. **Cards stacked** — Single column, 90px tall each (Schedule: 110px). Titles 18px, subtitles 13px.
+7. **No "Go to Back"** — X close button serves that role.
+8. **Live bar** — Full-width at bottom, 13px text.
+
+#### Technical
+9. **Font import** — Added EB Garamond italic variant (`ital,wght@...;1,600`) for "the crew" text.
+10. **Inline SVG icons** — WhatsApp, FaceTime, Google Meet, Phone, Calendar, Live indicator, Close (X), Chevron. No external icon dependencies.
+11. **Scroll preservation** — Mobile saves/restores `.main-card` scrollTop when opening/closing panel.
+12. **Keyboard** — Arrow key navigation blocked (capture phase `stopImmediatePropagation`) while panel is open.
+
+### 2026-03-27 — Session 7c: Contact Panel Fixes (Icons, Offline, Close Button, CSS)
+
+**Figma frames added:**
+- `Homepage - Button Clicked - Offline` (78:196, 1920×1080) — desktop offline
+- `Homepage - Mobile - Button Clicked - Offline` (78:984, 440×956) — mobile offline
+
+**Fix #1 — Real icon assets from Figma:**
+- Downloaded 8 icons to `assets/icons/`: `whatsapp.svg`, `facetime.svg`, `googlemeet.svg`, `phone.png`, `calendar.png`, `live.png`, `close.svg`, `chevron.svg`
+- Replaced all hand-drawn inline SVGs with `<img>` tags pointing to real Figma raster/vector assets
+
+**Fix #2 — Offline state:**
+- Added `.contact-panel.offline` CSS class with Figma-exact disabled card styles:
+  - Card bg: `rgba(210,163,104,0.2)`, icon bg: `rgba(255,255,255,0.1)`
+  - Title opacity: 0.4, subtitle opacity: 0.1, no chevrons, `pointer-events: none`
+  - Phone Call icon extra `opacity: 0.2`
+- Schedule a Call stays active (different bg/icon styling, keeps chevron)
+- JS `crewIsLive` flag toggles between states: changes description text, live bar text, schedule title
+- Offline description: "The crew is currently off board. Schedule a call - they'll reach out to confirm a time."
+- Offline bottom bar: "Leave a message and they'll get back to you **as soon as possible.**"
+- Schedule title changes to "Schedule a Call / Call me later" in offline mode
+
+**Fix #3 — X close button placement:**
+- Desktop: X only in white header area (`.contact-header-close`), positioned `top: 24px; right: 40px` using `close.svg` icon
+- Mobile: X only on yacht image (`.contact-close-mobile`), hidden on desktop via `display: none`
+- Added separate CSS class `.contact-close-mobile` to distinguish the two buttons
+
+**Fix #4 — White header 187px:**
+- Added `min-height: 187px` and `display: flex; flex-direction: column; justify-content: center` to `.contact-header`
+- Mobile override resets `min-height: auto`
+
+**Fix #5 — Go to Back border-radius:**
+- Changed from `12px 20px 20px 12px` to `0 20px 20px 12px` — top-left is flush with card edge per Figma
+
+**Fix #6 — Live icon sizing:**
+- `.contact-live-icon` set to `50×50px` with `border-radius: 4px; object-fit: cover` matching Figma's 50×50 live indicator
+
+### 2026-03-27 — Session 7d: Contact Panel Polish Pass
+
+**Fixes applied from review feedback:**
+
+1. **X close specificity** — `.contact-close-btn.contact-close-mobile { display: none !important }` ensures desktop hides the image X even though `.contact-close-btn` has `display: flex`.
+2. **Live icon sizing** — HTML `width/height` attributes changed from 24 to 50 to match CSS. Mobile override added: `width: 24px; height: 24px; border-radius: 4px`.
+3. **Carousel repositioning** — `.yacht-picker-wrapper.panel-active` class added with `pointer-events: none` and smooth transition. JS in `openContactPanel()` calculates carousel center as midpoint of golden content area below the white header. `closeContactPanel()` removes class and re-runs `alignPicker()`.
+4. **Contact options bottom padding** — Changed from `10px 40px 0` to `10px 40px 20px` for proper spacing before bottom bar.
+5. **CTA data attributes** — Added `data-cta="videocall|callme|watch"` to all CTA buttons. JS now uses `[data-cta="videocall"], [data-cta="callme"]` selector instead of fragile `textContent.trim()` matching.
+6. **applyCrewState() stale DOM** — Restructured live bar HTML with `#contactLiveBold`, `#contactLiveDetail`, `#contactLiveYacht` spans. Live state updates text nodes directly. Offline state still uses innerHTML for the different message structure but re-queries from DOM.
+7. **Frosted glass effects** — Added `backdrop-filter: blur()` + `-webkit-backdrop-filter: blur()` to all semi-transparent elements:
+   - Contact cards: `blur(12px)`
+   - Icon containers: `blur(8px)`
+   - Go to Back button: `blur(10px)`
+   - Live status bar: faked glass
+
+### 2026-03-27 — Session 7e: Contact Panel Bug Fixes (11 items)
+
+1. **Duplicate var** — Removed second `var contactLiveYacht` declaration.
+2. **Offline innerHTML** — Replaced with dedicated `#contactOfflineMsg` span. `applyCrewState()` now toggles `display` on `#contactLiveDetail` and `#contactOfflineMsg` — no more innerHTML rebuilding, no stale DOM references.
+3. **Mobile close button (CRITICAL)** — Removed `!important` from desktop hide rule. Scoped to `@media (min-width: 601px) { .contact-close-mobile { display: none } }`. Mobile `@media` override now works correctly.
+4. **Carousel → static side images** — Replaced `.panel-active` carousel repositioning with two new static `<img>` elements (`.panel-side-left`/`.panel-side-right`) inside `.page-inner`. Figma: 328×421px at ±316px from card center, 198px from card top. JS `showPanelSideImages()` sets src from prev/next yachts in current list, positions with absolute coords relative to card. Scrolling carousel hidden via `display: none` while panel is open. `hidePanelSideImages()` restores carousel and re-runs `alignPicker()`.
+5. **Carousel CSS** — Removed `.yacht-picker-wrapper.panel-active` (unused). Added `.panel-side-img` with `328×421px, border-radius: 20px, object-fit: cover, opacity transition`.
+6. **Offline dimmed cards** — Removed `backdrop-filter: none`, changed to `border-color: rgba(210,163,104,0.15); box-shadow: none` for subtle brown-tinted glass.
+7. **Close inline styles** — `hidePanelSideImages()` uses `pickerWrapper.style.display = ''` (clear) then `alignPicker()`. No lingering inline styles.
+8. **Watch Video** — No handler (noted, not in scope of contact panel).
+9. **Scrollbar hidden** — Added `scrollbar-width: none` + `.contact-panel::-webkit-scrollbar { display: none }`.
+10. **Glass effects** — Replaced all `backdrop-filter: blur()` with faked glass: `background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 2px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4)`. Works on flat gradient backgrounds where real blur has no visible effect.
+11. **Static side images** — See #4 above.
+
+---
+
+### 2026-03-27 — Session 7f: Side Image Animation + Mobile Contact Panel Fixes
+
+**Side image animation polish:**
+1. Base state changed from `display: none; opacity: 0` to `display: block; opacity: 0; pointer-events: none` — opacity transition now fires correctly on show.
+2. `hidePanelSideImages()` removes `.visible` class (opacity → 0), then restores carousel after 500ms timeout to let fade-out complete.
+
+**Mobile contact panel — Figma pixel match:**
+3. **White header zone** — Mobile `.contact-panel` background changed from golden gradient to `#fff`. Golden gradient moved to `.contact-options` background on mobile, matching Figma where gradient starts at card area (`top: 341px`). `.contact-bottom` gets solid `#ffb76d`.
+4. **Header padding** — Changed from `16px 20px 12px` to `36px 20px 14px` matching Figma: "Connect with" at 35.5px below image, first card at ~326px from top.
+5. **Header background** — `background: #fff` on mobile (was `transparent`), giving the text area a white zone before the golden cards.
+6. **X close button** — Changed from 36×36px circle at `top: 14px; right: 14px` to bare 20×20px icon at `top: 50px; right: 40px` matching Figma Union icon placement. No background, no border-radius.
+
 ---
 
 ## Reference Files
@@ -399,5 +510,6 @@
 | File | Purpose |
 |------|---------|
 | `index.html` | **Main deliverable** (single HTML file, inline CSS + JS, local assets) |
-| `assets/` | Local images: `yachts/`, `flags/`, `logo.svg` |
+| `assets/` | Local images: `yachts/`, `flags/`, `logo.svg`, `icons/` |
+| `assets/icons/` | Contact panel icons: `whatsapp.svg`, `facetime.svg`, `googlemeet.svg`, `phone.png`, `calendar.png`, `live.png`, `close.svg`, `chevron.svg` |
 | This document | Project tracker |
