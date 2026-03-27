@@ -748,18 +748,16 @@ body {
   gap: 14px;
   height: 110px;
   padding: 0 20px;
-  background: rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.2);
+  border: none;
   border-radius: 20px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s;
   text-align: left;
   font-family: 'Inter', sans-serif;
 }
 .contact-card:hover {
-  background: rgba(255,255,255,0.35);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.3);
 }
 .contact-card-full { grid-column: 1 / -1; }
 .contact-card-icon {
@@ -767,7 +765,6 @@ body {
   height: 60px;
   border-radius: 10px;
   background: rgba(255,255,255,0.6);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -809,8 +806,7 @@ body {
   width: 190px;
   height: 73px;
   background: rgba(255,255,255,0.4);
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+  border: none;
   border-radius: 0 20px 20px 12px;
   font-family: 'Inter', sans-serif;
   font-size: 20px;
@@ -826,8 +822,7 @@ body {
   flex: 1;
   height: 50px;
   background: rgba(255,255,255,0.4);
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+  border: none;
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -852,8 +847,6 @@ body {
 .contact-panel.offline .contact-card[data-action="googlemeet"],
 .contact-panel.offline .contact-card[data-action="phone"] {
   background: rgba(210,163,104,0.2);
-  border-color: rgba(210,163,104,0.15);
-  box-shadow: none;
   cursor: default;
   pointer-events: none;
 }
