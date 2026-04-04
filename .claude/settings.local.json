@@ -16,7 +16,21 @@
       "Bash(npm list:*)",
       "Bash(find /opt/homebrew/lib/node_modules/@hisma/server-puppeteer -name *.ts)",
       "Bash(node:*)",
-      "mcp__plugin_figma_figma__get_screenshot"
+      "mcp__plugin_figma_figma__get_screenshot",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/a4bdeeb1-42fa-40dd-988c-4a0aa016a0e2\" -o whatsapp.png)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/405d6721-de94-4478-a319-414c40a5235c\" -o facetime.png)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/f6e30511-62fb-43bf-95f8-5bd6ec1c4d2e\" -o googlemeet.png)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/1a06dab6-39ce-4130-b3cf-3ae40a3920f5\" -o phone.png)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/db8ba7db-bbf1-49ef-a370-ff2e2dc8177a\" -o calendar.png)",
+      "Bash(file:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(python3:*)",
+      "mcp__plugin_figma_figma__use_figma",
+      "mcp__plugin_figma_figma__search_design_system",
+      "mcp__plugin_figma_figma__get_variable_defs"
     ]
   }
 }
